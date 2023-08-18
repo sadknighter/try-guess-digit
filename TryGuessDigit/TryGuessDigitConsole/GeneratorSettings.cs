@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Extensions.Configuration;
 
 namespace TryGuessDigitConsole
 {
@@ -14,7 +10,16 @@ namespace TryGuessDigitConsole
 
         public GeneratorSettings() 
         {
-            throw new NotImplementedException();
+            IConfigurationBuilder builder = new ConfigurationBuilder()
+                   .SetBasePath(Directory.GetCurrentDirectory())
+                    .AddJsonFile("appsettings.json", optional: false);
+
+            IConfiguration config = builder.Build();
+            
+            this.GuessTimesCount = Convert.ToInt32(config["GuessTimesCount"]);
+            this.RangeStartItem = Convert.ToInt32(config["RangeStartItem"]);
+            this.RangeEndItem = Convert.ToInt32(config["RangeEndItem"]);
+
         }  
     }
 }

@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TryGuessDigitConsole.Services
+﻿namespace TryGuessDigitConsole.Services
 {
     public class DigitGenerator
     {
@@ -16,6 +10,11 @@ namespace TryGuessDigitConsole.Services
 
         public int GuessTime { get => _guessTime; }
 
+        public int LeftGuessAttempts { get {
+                var leftAttempts = _guessTimesCount - _guessTime;
+                return leftAttempts > 0 ? leftAttempts : 0;
+            }
+        }
 
         public DigitGenerator(GeneratorSettings settings)
         {
@@ -26,7 +25,7 @@ namespace TryGuessDigitConsole.Services
 
         public bool TryGuess(int val)
         {
-            if (_guessTime == _guessTimesCount)
+            if (_guessTime > _guessTimesCount)
             {
                 throw new InvalidOperationException("No more attempts");
             }
