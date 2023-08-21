@@ -1,11 +1,14 @@
-﻿using System.Diagnostics.Metrics;
+﻿using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using TryGuessDigitConsole.Exceptions;
 using TryGuessDigitConsole.Interfaces;
 
 namespace TryGuessDigitConsole.Services
 {
-    public class DigitGenerator
+    public class DigitGenerator : IDigitGenerator
     {
+        private readonly ILogger<DigitGenerator> _logger;
+
         private readonly int _digitForGuess;
 
         private readonly int _rangeStartItem;
@@ -29,9 +32,10 @@ namespace TryGuessDigitConsole.Services
             }
         }
 
-        public DigitGenerator(AppSettings settings, IGuessValidator validator)
+        public DigitGenerator(IGuessValidator validator, ILogger<DigitGenerator> logger, IConfiguration configuration)
         {
             var rnd = new Random();
+            var settings = new AppSettingsReader(configuration).GetAppSettings();
             _guessTimesCount = settings.GuessTimesCount;
             _rangeStartItem = settings.RangeStartItem;
             _rangeEndItem = settings.RangeEndItem;
@@ -39,13 +43,14 @@ namespace TryGuessDigitConsole.Services
             _digitForGuess = rnd.Next(settings.RangeStartItem, settings.RangeEndItem);
 
             _validator = validator;
+            _logger = logger;
         }
 
         public bool TryGuess(int val)
         {
             var guessResult = _digitForGuess == val;
             _guessTime++;
-
+            _logger.LogInformation("Tryied to guess digit", val);
             return guessResult;
         }
 
@@ -53,8 +58,9 @@ namespace TryGuessDigitConsole.Services
         {
             string? lastGuessResult = _validator.GetValidateStatus(val, _digitForGuess, _rangeStartItem, _rangeEndItem);
 
-            if (_guessTime > _guessTimesCount)
+            if (_guessTime == _guessTimesCount)
             {
+                _logger.LogWarning("Attempts ended");
                 throw new AttemptsException(lastGuessResult, "No more attempts");
             }
 

@@ -1,4 +1,5 @@
 ﻿using TryGuessDigitConsole.Exceptions;
+using TryGuessDigitConsole.Interfaces;
 
 namespace TryGuessDigitConsole.Services
 {
