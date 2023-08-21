@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.Metrics;
 using TryGuessDigitConsole.Exceptions;
+using TryGuessDigitConsole.Interfaces;
 
 namespace TryGuessDigitConsole.Services
 {
@@ -15,7 +16,7 @@ namespace TryGuessDigitConsole.Services
 
         private int _guessTime;
 
-        private readonly GuessValidator _validator;
+        private readonly IGuessValidator _validator;
 
         public int GuessTime { get => _guessTime; }
 
@@ -28,7 +29,7 @@ namespace TryGuessDigitConsole.Services
             }
         }
 
-        public DigitGenerator(AppSettings settings, GuessValidator validator)
+        public DigitGenerator(AppSettings settings, IGuessValidator validator)
         {
             var rnd = new Random();
             _guessTimesCount = settings.GuessTimesCount;

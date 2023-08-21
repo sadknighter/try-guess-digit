@@ -2,7 +2,7 @@
 
 namespace TryGuessDigitConsole.Services
 {
-    public class AppSettingsBuilder
+    public static class AppSettingsBuilder
     {
         private static AppSettings? _appSettings;
 

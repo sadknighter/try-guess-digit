@@ -2,7 +2,7 @@
 
 namespace TryGuessDigitConsole.Services
 {
-    public class GuessValidator
+    public class GuessValidator : IGuessValidator
     {
         public string GetValidateStatus(int val, int digitForGuess, int rangeStart, int rangeEnd)
         {
@@ -26,7 +26,7 @@ namespace TryGuessDigitConsole.Services
             }
             else
             {
-               throw new InvalidValidationStateException(val, "Can't check digit state for guess");
+                throw new InvalidValidationStateException(val, "Can't check digit state for guess");
             }
 
             return lastGuessResult;
